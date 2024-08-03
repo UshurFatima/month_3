@@ -26,7 +26,7 @@ dp = Dispatcher()
 
 
 @dp.message(Command('start'))
-async def echo_handler(message: types.Message):  # handler - обработчик
+async def start_handler(message: types.Message):  # handler - обработчик
     print(vars(message.from_user))  # информация о пользователе
     await message.answer(f'Привет, {message.from_user.first_name}! '
                          f'Я первый бот Фатимы!')
