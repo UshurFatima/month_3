@@ -37,8 +37,3 @@ async def aboutus_handler(callback: types.CallbackQuery):  # функция пр
 @start_router.callback_query(F.data == 'vacancies')  # F.data: data потому что инфа с кнопки
 async def vacancies_handler(callback: types.CallbackQuery):
     await callback.message.answer('Тут будут вакансии')
-
-
-@start_router.message(F.text == 'Детектив')  # F.text: text потому что инфа с сообщения
-async def detective_handler(message: types.Message):
-    await message.answer('Книги жанра Детектив')

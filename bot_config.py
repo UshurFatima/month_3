@@ -1,4 +1,4 @@
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
 # диспетчер занимается приёмом событий от Telegram и раскидыванием их по хэндлерам через фильтры и мидлвари.
 from dotenv import load_dotenv
 # loads the environment variables from your . env file
@@ -13,3 +13,12 @@ token = getenv('BOT_TOKEN')
 # какой именно бот к ним обращается.
 bot = Bot(token=token)
 dp = Dispatcher()
+
+
+async def set_bot_commands():
+    await bot.set_my_commands([
+        types.BotCommand(command='start', description='Начало'),
+        types.BotCommand(command='picture', description='Получите картинку'),
+        types.BotCommand(command='shop', description='Наш каталог книг'),
+        types.BotCommand(command='opros', description='Опрос про любимый жанр книг')
+    ])
