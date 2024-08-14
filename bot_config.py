@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 # loads the environment variables from your . env file
 from os import getenv
 # retrieves(извлекает) these variables so that you can use them in your script
+from database.database import Database
 
 
 load_dotenv()  # чтоб все, что было в env стало доступным в коде
@@ -13,6 +14,7 @@ token = getenv('BOT_TOKEN')
 # какой именно бот к ним обращается.
 bot = Bot(token=token)
 dp = Dispatcher()
+database = Database('db.sqlite3')
 
 
 async def set_bot_commands():

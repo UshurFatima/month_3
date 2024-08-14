@@ -5,7 +5,7 @@ from aiogram.fsm.state import State, StatesGroup
 # managing transitions between them;  to simulate sequential
 # logic, or, in other words, to represent and control execution flow
 from aiogram.fsm.context import FSMContext
-
+from bot_config import database
 
 survey_router = Router()
 
@@ -55,8 +55,19 @@ async def process_gender(message: types.Message, state: FSMContext):
 @survey_router.message(BookSurvey.genre)
 async def process_genre(message: types.Message, state: FSMContext):
     await state.update_data(genre=message.text)
+
     await message.answer('Спасибо за пройженный опрос!')
     data = await state.get_data()
     print(data)
-    # чтобы бот не ожидал больше ответа
+
+    database.execute(query='''INSERT INTO book_survey (name, age, gender, genre) VALUES 
+    (?, ?, ?, ?)''', params=(
+        data.get('name'),
+        data.get('age'),
+        data.get('gender'),
+        data.get('genre')
+    )
+                     )
+
+    # чтобы бот не ожидал больше ответа; очищаем данные и состояния
     await state.clear()
