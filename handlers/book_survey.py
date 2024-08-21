@@ -1,4 +1,4 @@
-from aiogram import Router, types
+from aiogram import Router, types, F
 from aiogram.filters.command import Command
 from aiogram.fsm.state import State, StatesGroup
 # for organizing bot behavior into distinct states and
@@ -6,6 +6,8 @@ from aiogram.fsm.state import State, StatesGroup
 # logic, or, in other words, to represent and control execution flow
 from aiogram.fsm.context import FSMContext
 from bot_config import database
+from keyboards import genres_keyboard
+
 
 survey_router = Router()
 
@@ -20,7 +22,15 @@ class BookSurvey(StatesGroup):
 @survey_router.message(Command('opros'))
 async def start_survey(message: types.Message, state: FSMContext):
     await state.set_state(BookSurvey.name)
+    await message.answer('Давайте начнем опрос. Вы можете его остановить при помощи слова "стоп"')
     await message.answer('Как Вас зовут?')
+
+
+@survey_router.message(Command('stop'))
+@survey_router.message(F.text == 'стоп')
+async def stop_survey(message: types.Message, state: FSMContext):
+    await state.clear()
+    await message.answer('Опрос остановлен. Вы его не закончили')
 
 
 @survey_router.message(BookSurvey.name)
@@ -49,7 +59,7 @@ async def process_age(message: types.Message, state: FSMContext):
 async def process_gender(message: types.Message, state: FSMContext):
     await state.update_data(gender=message.text)
     await state.set_state(BookSurvey.genre)
-    await message.answer('Ваш любимый жанр книг?')
+    await message.answer('Ваш любимый жанр литературы?', reply_markup=genres_keyboard())
 
 
 @survey_router.message(BookSurvey.genre)
